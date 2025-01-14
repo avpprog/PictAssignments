@@ -1,0 +1,135 @@
+// LP2 Assignment1 DFS and BFS algorithm
+#include <bits/stdc++.h>
+using namespace std;
+
+class Graph {
+    private:
+    unordered_map<string, vector<string>> connections;
+    
+    string toLower(string s) {
+        transform(s.begin(), s.end(), s.begin(), ::tolower);
+        return s;
+    } //To normalize the case
+    
+    bool depthLimitSearch(string current, string target, int level, int limit, set<string>& visited){
+        if(level > limit)
+            return false;
+        
+        cout << "Searching at level "<< level << ": " << current << endl;
+        
+        if (current == target) {
+            cout << "Target " << target << " found at Level " << level << endl;  // Debug line
+            return true;
+        }
+        
+        visited.insert(current);
+        for (auto& neighbor : connections[current]) {
+            if (visited.find(neighbor) == visited.end()) {
+                if (depthLimitSearch(neighbor, target, level + 1, limit, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public:
+    Graph() {
+        int choice;
+        string node1, node2;
+        while (1) {
+            cout << "\nEnter names of two connected nodes: ";
+            cin >> node1 >> node2;
+            node1 = toLower(node1);
+            node2 = toLower(node2);
+            addConnection(node1, node2);
+            cout << "Do you want to add another connection? (0/1): ";
+            cin >> choice;
+            if (choice == 0) break;
+        }
+    }
+    
+    void addConnection(string u, string v) {
+        connections[u].push_back(v);
+        connections[v].push_back(u);
+    }
+
+    // Breadth First Search
+    void bfs(string start) {
+        queue<pair<string, int>> q; 
+        set<string> visited;
+        q.push({start, 0});
+        visited.insert(start);
+
+        cout << "\nBreadth First Search:\n";
+        while (!q.empty()) {
+            string root = q.front().first;
+            int level = q.front().second;
+            q.pop();
+
+            cout << "Level " << level << ": " << root << endl;
+
+            for (auto& neighbor : connections[root]) {
+                if (visited.find(neighbor) == visited.end()) {
+                    q.push({neighbor, level + 1});
+                    visited.insert(neighbor);
+                }
+            }
+        }
+    }
+    
+    // Depth First Search
+    void dfs(string current, int level, set<string>& visited) {
+        visited.insert(current);
+        cout << "Level " << level << ": " << current << endl;
+
+        for (auto& neighbor : connections[current]) {
+            if (visited.find(neighbor) == visited.end()) {
+                dfs(neighbor, level + 1, visited);
+            }
+        }
+    }
+
+    void depthFirstSearch(string start) {
+        set<string> visited;
+        cout << "\nDepth First Search:\n";
+        dfs(start, 0, visited);
+    }
+};
+
+int main() {
+    Graph run;
+
+    cout << "\n-----------DFS and BFS algorithm--------------" << endl;
+
+    int choice = 0;
+    string start;
+    int depth;
+
+    while (1) {
+        cout << "\nChoose an option:\n";
+        cout << "1. Breadth First Search\n";
+        cout << "2. Depth First Search\n";
+        cout << "3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter the starting node: ";
+                cin >> start;
+                run.bfs(start);
+                break;
+            case 2:
+                cout << "Enter the starting node: ";
+                cin >> start;
+                run.depthFirstSearch(start);
+                break;
+            case 3:
+                cout << "Exiting." << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Try again!" << endl;
+        }
+    }
+}

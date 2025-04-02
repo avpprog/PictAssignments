@@ -1,0 +1,11 @@
+<apex:page controller="Area">
+    <apex:sectionHeader title="Area" subtitle="tool area" />
+    <apex:form>
+        <apex:pageBlock title="Area tool">
+            <apex:pageBlockButtons ></apex:pageBlockButtons>
+            <apex:commandButton value="Rectangle" action="{!AreaofRectangle}"/>
+            
+        
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -3,7 +3,7 @@ public class Area {
     public integer input2 {get; set; }
     public decimal result {get; set; }
     
-    public void AreaofTriangle(){
-        result = 0.5 * input1 * input2;
+    public void AreaofRectangle(){
+        result = input1 * input2;
     }
 }
